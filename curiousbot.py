@@ -11,25 +11,21 @@ while True:
 	if x >= 1546553130: #unix timestamp
 		BOT_PREFIX = "€"
 		client = Bot(command_prefix=BOT_PREFIX)
-
-		@client.command()
-		async def eight_ball(name='8ball',
-							 description='eventually this will be replaced by something smarter or better',
-							 brief='ask a question and it will answer, smartly',
-							 aliases=['eightball']):
-			possible_responses = [
-				'no',
-				'yes',
-				'maybe',
-				'4Shrug',]
-			await client.say(random.choice(possible_responses))
-			
 		
 		@client.event
 		async def on_message(message):
 			# we do not want the bot to reply to itself
 			if message.author == client.user:
 				return
+			print(message) #prints the message to console
+			msg = message.content #gets content 
+			auth = message.author #gets author
+			print(msg) 
+			f = open("discordlog.txt", "a") #replace discordlog with the name of your file
+			with open("discordlog.txt",'a',encoding = 'utf-8') as f:
+				f.write(str(int(time.time())) + " ")
+				f.write(str(auth) + " : ") 
+				f.write(msg + "\n") #notice no file close, don't know if thats an issue or not
 				
 			if message.content.startswith('[fuck'):
 				msg = 'Hello {0.author.mention} im a something!!!'.format(message)
