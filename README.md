@@ -1,13 +1,49 @@
-# curiousbot
-a discord bot made by the help of discord.py link https://github.com/Rapptz/discord.py  
-this bot also requires pyOWM for one of its commands, more info on https://github.com/csparpa/pyowm  
+
+# Curiousbot
+
+This is a Discord bot , made using the discord.py api found here: https://github.com/Rapptz/discord.py
+
+This bot also utilizes a second api, pyOWM, for weather found here: https://github.com/csparpa/pyowm
+
+There are many uses of the bot described in the features section. Any feature that has complex interactive ability will described in more detail in the Usage section.
+
+
+## Usage/Examples for Stock Simulator
+Note: people wishing to create a profile should attempt to buy one stock (might need to do it twice).
+
+In order to trade a stock, use the following command:
+```
+<prefix> $<ticker> <buy, sell> <amount>
+```
+Where prefix is your bot's prefix, and ticker is the ticker symbol of your stock. The amount refers to the amount of shares.
+
+
+If you would like to view your profile, use the following command:
+```
+<prefix> getprofilevalue
+```
+Where prefix is your bot's prefix, and it will display how much (paper) money you currently have.
+
+If you are just interested in the current stock price, you can use:
+```
+<prefix> getstockvalue
+```
+Where prefix is your bot's prefix, and it will display the stock's current price.
+
+
+Markov chain commands:
+To be explained.
+
+
+
   
-This bot intends to put together a complitation of fun but relatively useful scripts and functions that can be accessed and used via discord. Here is an ever growing list of what it can do so far:  
-  
-1. The bot logs every message sent in every channel it is in and writes it to some file. Notice that it doesn't take into account name changes, this will likely be fixed in the future.  
-2. The bot logs each reaction now as well, reactions can be used to collect statistics on funny messages. I will likely use a soon to be uploaded c++ program to cycle through the textfile created by this bot to make statistics. The bot will log the user who reacted, and the emoji that was used.  
-3. As mentioned above, one of the commands includes the use of the pyOWM api in order to search and grab weather information about a particular location that you can enter, along with units and such. It then displays it in a single message.  
-4. To build on accessing weather, there is also a comamnd to pull weather images from a website like https://wttr.in/ , which presents weather beautifully in ASCII characters. This is mostly taking advantage of the fact that discord will auto embbed previews of website links, which works in our favor. 
+## Features
+
+- Logging Capabilities: Logs all messages where the bot has read messages permissions and stores it locally.
+- Stock Simulator: Buy and sell a (virtual) stock in chat.
+- Markov Chain Text Generator (Python Version)
+- Weather Checking from chat. Uses both api access and discord embedding via the website https://wttr.in 
+
 
 
 
