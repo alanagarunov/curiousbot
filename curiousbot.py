@@ -3,26 +3,61 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Bot
 import time
+import socket
 import random
 import sys
+from gpiozero import CPUTemperature
+from timeloop import Timeloop
 
 #Function imports
 from owofy import owofunction
 from checkweather import thechecker
 from sexyweather import simpleweather
+from stockssimulator import adddata
+from stockssimulator import getdata
+from stockssimulator import getstockprice
+from markovread import mainadder
+from markovgenerate import maingenerator
  
 #client = discord.client()
-client = Bot(command_prefix='&')
+client = Bot(command_prefix='<prefix> ')
  
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
  
-#used to log messages where bot has view messages role
+
 @client.event
 async def on_message(message):
-    if message.author == client.user:
-        return
+
+    msgtemp = message.content
+
+    #tempchannel = message.channel
+    #print(tempchannel)
+    #if tempchannel == "<name_of_channel>":
+    
+    if not message.author.bot:
+        msgforchains = message.content
+        mainadder(msgforchains, "<name_of_channel>")
+    
+    personname = message.author.id
+    if str(personname) == "<user_id>":
+        msgforchains = message.content
+        mainadder(msgforchains, "<same_as_filename>")
+    elif str(personname) == "<user_id>":
+        msgforchains = message.content
+        mainadder(msgforchains, "<same_as_filename>")
+    elif str(personname) == "<user_id>" and (str(message.channel) != ("<name_of_channel>" or "<name_of_channel>")):
+        msgforchains = message.content
+        mainadder(msgforchains, "<same_as_filename>")
+    elif str(personname) == "<user_id>":
+        msgforchains = message.content
+        mainadder(msgforchains, "<same_as_filename>")
+    elif str(personname) == "<user_id>" and (str(message.channel) != ("<name_of_channel>" or "<name_of_channel>")):
+        msgforchains = message.content
+        mainadder(msgforchains, "<same_as_filename>")
+    
+
     pics = []
     pics = message.attachments #gets a list of data attached
     if not pics:
@@ -35,7 +70,7 @@ async def on_message(message):
             f.write(str(int(time.time())) + " ")
             f.write(str(chan) + " ")
             f.write(str(auth) + " : ") 
-            f.write(msg + "\n") #notice no file close, unneeded, handeld automatically
+            f.write(msg + "\n") #notice no file close, don't know if thats an issue or not
     else:
         for p in pics: #cycle through 1 thing that was attached to message
             content = p
@@ -48,14 +83,18 @@ async def on_message(message):
                 f.write(str(auth) + " : ")
                 f.write("image ")  #so we know its an image
                 f.write(str(p) + "\n")
-
+    #elif message.author.id == "<user_id>"
+    #   text = message.content
+    #   print(text)
  
-    if message.content.startswith('WELOME'):
+    if message.content.startswith('WELOME') and not message.author.bot:
         await message.channel.send('WELOME')
-    #the bot will not recognize commands without this line
+    elif message.content.startswith('welome') and not message.author.bot:
+        await message.channel.send('WELOME')
+
     await client.process_commands(message)
- 
-#logs who reacts and what they reacted with on messages
+
+
 @client.event
 async def on_reaction_add(reaction, user):
 	reacter = user.name #gets who reacted
@@ -67,17 +106,17 @@ async def on_reaction_add(reaction, user):
 		r.write(str(emoj) + " ")
 		r.write("Reacted this much: " + str(amount) + "\n")	
 
-#text modifier command
-@client.command(name="owofy")
+#this was really just made when i was first learning how to use this api
+@client.command(name="owofy",
+                brief = "Makes your text cute.")
 async def owo_translater(ctx, cutemessage):
     try:
         text0 = []
         text0 = owofunction(cutemessage)
     except BadArgumentError:
-            await ctx.send("hi, youw input contains a quotation which wiww make python vewwy angwy! pwease dont do ok")
+            await ctx.send("hi, youw input contains a quotation which wiww make python vewwy angwy! pwease dont do that ok")
     await ctx.send("(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ " + "".join(text0) + " (´･ω･`)")
 
-#looks the weather up, provides a lot of info, uses pyOWM api
 @client.command(name = "checkweather",
                 description = "yeah, it checks the weather btw",
                 brief = "input location, output atmospheric conditions. Usage: City,Country")
@@ -91,13 +130,87 @@ async def lookupweather(ctx, request, unit, loc):
                         "And your barometric pressure: " + theinfo[3] + " mb" + "\n" +
                         "Conditions: " + theinfo[5])
 
-#takes avadvantage of discord automatically embbedding websites, works on the same principle of checkweather but pastes a url of
-#a known weather site with information in a picture
+#comment out command if on Windows
+@client.command(name = "checksystem",
+                description = "Checks the status of the sytem",
+                brief = "Checks the status of the sytem")
+async def pisystem(ctx):
+    cpu = CPUTemperature()
+    ctx.send("The CPU temperature is: " + str(cpu.temperature))
+
+
+@client.command(name= "ping",
+                description = "Is that website working??? is discord down??? Try and find out",
+                brief = "use <prefix> ping discord_<region>")
+async def pingcommand(ctx, REMOTE_SERVER):
+    try:
+        south = "us-south373.discord.gg"
+        west = "us-west937.discord.gg"
+        central = "us-central307.discord.gg"
+        eu = "eu-central971.discord.gg"
+        africa = "southafrica996.discord.gg"
+        japan = "japan906.discord.gg"
+        aus = "sydney334.discord.gg"
+        #listofregions = [south,west,central,eu,africa,japan,aus]
+        if REMOTE_SERVER == "discord_south":
+            REMOTE_SERVER = south
+        elif REMOTE_SERVER == "discord_west":
+            REMOTE_SERVER = west
+        elif REMOTE_SERVER == "discord_central":
+            REMOTE_SERVER = central
+        elif REMOTE_SERVER == "discord_eu":
+            REMOTE_SERVER = eu
+        elif REMOTE_SERVER == "discord_africa":
+            REMOTE_SERVER = africa
+        elif REMOTE_SERVER == "discord_japan":
+            REMOTE_SERVER = japan
+        elif REMOTE_SERVER == "discord_aus":
+            REMOTE_SERVER = aus
+        host = socket.gethostbyname(REMOTE_SERVER)
+        before = time.perf_counter()
+        s = socket.create_connection((host, 80), 2)
+        after = time.perf_counter()
+        elapsedtime = (after - before)*1000
+        await ctx.send("Ping time was " + str(elapsedtime) + " ms")
+    except Exception as e:
+        elapsedtime = "Ping returned error. Error in question: "
+        await ctx.send(elapsedtime + str(e))
+    
+
 @client.command(name = "sexyweather",
                 description = "displays weather in an easier way",
-                brief = "much better than the weather api thing")
+                brief = "USAGE: sexyweather <sexy, simple> <your location in one word>")
 async def sexyweather(ctx, request, loc):
-    someurl = simpleweather(request, loc)
-    await ctx.send(someurl)
+    try:
+        someurl = simpleweather(request, loc)
+        await ctx.send(someurl)
+    except Exception as e:
+        await ctx.send("Error has occured, Ping @curiousdoge#4240 with the following error message: " + str(e))
+
+
+@client.command(name = "$<Ticker_name>",
+				description = "filler",
+				brief = "trade stocks. USAGE: $<Ticker_name> <buy, sell> <amount>")
+async def stockssimulator(ctx, stocktype, shareamount):
+    trader = ctx.author
+    finalmessage = adddata(trader, stocktype, shareamount)
+    await ctx.send(finalmessage)
+
+@client.command(name = "getportfoliovalue",
+				description = "filler",
+				brief = "shows your portfolio valie")
+async def stockssimulatorvalue(ctx):
+    trader = ctx.author
+    finalmessage = getdata(trader)
+    await ctx.send(finalmessage)
+
+@client.command(name = "getstockvalue",
+				description = "filler",
+				brief = "shows current stock value")
+async def stockssimulatorstockvalue(ctx):
+    #trader = ctx.author
+    finalmessage = getstockprice()
+    await ctx.send(finalmessage)
+
  
-client.run('<token>')
+client.run('<Token>')
