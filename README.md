@@ -7,6 +7,23 @@ This bot also utilizes a second api, pyOWM, for weather found here: https://gith
 
 There are many uses of the bot described in the features section. Any feature that has complex interactive ability will described in more detail in the Usage section.
 
+## Setup
+To setup all requirements and your virtual environments just follow the following string of text. Execute each line one by one. (Note: Windows specific instructions, Linux differs slightly)
+```
+python -m venv env
+source env/scripts/activate
+pip install -r requirements.txt
+```
+To exit your virtual environment, execute
+```
+deactivate
+```
+
+To run the bot, make sure you have entered your bot's token, then execute the following
+```
+python curiousbot.py
+```
+You should see a message that says "We have logged in as \<username\>#\<discriminator\>" after a few seconds.
 
 ## Usage/Examples for Stock Simulator
 Note: people wishing to create a profile should attempt to buy one stock (might need to do it twice).
