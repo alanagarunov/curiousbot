@@ -51,7 +51,13 @@ Where prefix is your bot's prefix, and it will display the stock's current price
 Markov chain commands:
 To be explained.
 
+### Testing
 
+The stock simulator has two tests that creates a profile and buys a stock to check to see if the simulator is working properly still. To run it, on a terminal in the main directory of the bot run
+```
+python -m unittest tests/test_stock_simulator.py
+```
+The test should return "OK" if successful.
 
   
 ## Features
