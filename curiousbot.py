@@ -224,6 +224,40 @@ async def sexyweather(ctx, request, loc):
             "Error has occured, Ping @curiousdoge#4240 with the following error message: "
             + str(e)
         )
+        
+@client.command(name = "wordle",
+                description = "More descriptive text here",
+                breif = "descriptive text")
+async def wordle(ctx, arg):
+    word = "sushi"
+    word_freq = {}
+  
+    for i in word:
+        if i in word_freq:
+            word_freq[i] += 1
+        else:
+            word_freq[i] = 1
+
+    answer = list(word)
+    user_word = list(arg)
+
+    result = ""
+
+    if len(user_word) == 5:
+        for x, y in zip(answer, user_word):
+            if x == y:
+                result += '\U0001F7E9'
+                word_freq[y] -= 1
+            else:
+                result += '\u2B1B' 
+
+        for x, y, r in zip(answer, user_word, range(0,5)):
+            if y in word and word_freq[y] > 0:
+                result = result[:r] + '\U0001F7E8' + result[r+1:]
+                word_freq[y] -= 1
+        await ctx.send(result)
+    else:
+        await ctx.send("Word is too long or short, must be 5 characters.")
 
 
 @client.command(
